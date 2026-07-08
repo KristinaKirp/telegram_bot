@@ -26,7 +26,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 @Component
-public class Bot extends TelegramWebhookBot {
+public class Bot extends TelegramLongPollingBot  {
 
     private final ReminderRepository repository;
 
@@ -50,21 +50,33 @@ public class Bot extends TelegramWebhookBot {
         return botToken;
     }
 
-    @Override
-    public String getBotPath() {
-        return "/webhook";  // ← путь, куда Telegram будет стучаться
-    }
+//    @Override
+//    public String getBotPath() {
+//        return "/webhook";  // ← путь, куда Telegram будет стучаться
+//    }
+//
+//    @Override
+//    public BotApiMethod<?> onWebhookUpdateReceived(Update update) {
+//        if (update.hasCallbackQuery()) {
+//            handleCallback(update);
+//        } else if (update.hasMessage() && update.getMessage().hasText()) {
+//            handleMessage(update);
+//        }
+//        return null;
+//    }
 
     @Override
-    public BotApiMethod<?> onWebhookUpdateReceived(Update update) {
+    public void onUpdateReceived(Update update) {
+        // ВСЯ ТВОЯ ЛОГИКА ОБРАБОТКИ
         if (update.hasCallbackQuery()) {
             handleCallback(update);
-        } else if (update.hasMessage() && update.getMessage().hasText()) {
+            return;
+        }
+
+        if (update.hasMessage() && update.getMessage().hasText()) {
             handleMessage(update);
         }
-        return null;
     }
-
 
     private void handleMessage(Update update) {
 
