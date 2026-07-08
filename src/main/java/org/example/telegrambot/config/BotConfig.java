@@ -28,7 +28,16 @@ public class BotConfig {
             botsApi.registerBot(bot);
 
             System.out.println("=== BOT REGISTERED ===");
-
+            new Thread(() -> {
+                while (true) {
+                    try {
+                        Thread.sleep(60000);
+                        System.out.println("BOT IS ALIVE " + java.time.LocalDateTime.now());
+                    } catch (InterruptedException e) {
+                        break;
+                    }
+                }
+            }).start();
         } catch (Exception e) {
             e.printStackTrace();
         }
