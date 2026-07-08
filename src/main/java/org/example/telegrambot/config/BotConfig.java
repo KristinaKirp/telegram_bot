@@ -23,7 +23,6 @@ public class BotConfig {
 
             System.out.println("Бот запущен");
             System.out.println("Username = " + bot.getBotUsername());
-            System.out.println("Token = " + bot.getBotToken());
 
         } catch (Exception e) {
             e.printStackTrace();
