@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class HealthController {
 
-    @GetMapping("/")
+    @GetMapping("/health")
     public String health() {
-        return "Bot is running";
+        return "OK";
     }
 }
