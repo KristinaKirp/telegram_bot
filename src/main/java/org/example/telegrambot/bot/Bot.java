@@ -26,7 +26,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 @Component
-public class Bot extends TelegramLongPollingBot  {
+public class Bot extends TelegramWebhookBot  {
 
     private final ReminderRepository repository;
 
@@ -40,6 +40,9 @@ public class Bot extends TelegramLongPollingBot  {
     @Value("${bot.token}")
     private String botToken;
 
+    @Value("${bot.webhook.url:}")
+    private String webhookUrl;
+
     @Override
     public String getBotUsername() {
         return "napominalka07_bot";
@@ -50,33 +53,34 @@ public class Bot extends TelegramLongPollingBot  {
         return botToken;
     }
 
-//    @Override
-//    public String getBotPath() {
-//        return "/webhook";  // ← путь, куда Telegram будет стучаться
-//    }
-//
-//    @Override
-//    public BotApiMethod<?> onWebhookUpdateReceived(Update update) {
-//        if (update.hasCallbackQuery()) {
-//            handleCallback(update);
-//        } else if (update.hasMessage() && update.getMessage().hasText()) {
-//            handleMessage(update);
-//        }
-//        return null;
-//    }
+    @Override
+    public String getBotPath() {
+        return "/webhook";  // путь, куда Telegram будет стучаться
+    }
 
     @Override
-    public void onUpdateReceived(Update update) {
-        // ВСЯ ТВОЯ ЛОГИКА ОБРАБОТКИ
+    public BotApiMethod<?> onWebhookUpdateReceived(Update update) {
+        // Вся логика обработки
         if (update.hasCallbackQuery()) {
             handleCallback(update);
-            return;
-        }
-
-        if (update.hasMessage() && update.getMessage().hasText()) {
+        } else if (update.hasMessage() && update.getMessage().hasText()) {
             handleMessage(update);
         }
+        return null;  // всегда возвращаем null
     }
+
+//    @Override
+//    public void onUpdateReceived(Update update) {
+//        // ВСЯ ТВОЯ ЛОГИКА ОБРАБОТКИ
+//        if (update.hasCallbackQuery()) {
+//            handleCallback(update);
+//            return;
+//        }
+//
+//        if (update.hasMessage() && update.getMessage().hasText()) {
+//            handleMessage(update);
+//        }
+//    }
 
     private void handleMessage(Update update) {
 
