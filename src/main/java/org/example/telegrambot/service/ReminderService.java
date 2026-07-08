@@ -9,6 +9,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
@@ -43,7 +44,7 @@ public class ReminderService {
                 int month = Integer.parseInt(parts[0]);
                 int day = Integer.parseInt(parts[1]);
 
-                LocalDate today = LocalDate.now();
+                LocalDate today = LocalDate.now(ZoneId.of("Europe/Samara"));
 
                 LocalDate eventDate = LocalDate.of(
                         today.getYear(),
@@ -85,7 +86,7 @@ public class ReminderService {
     @Scheduled(fixedRate = 60000)
     public void checkOnceReminders() {
         System.out.println("Проверка напоминаний...");
-        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime now = LocalDateTime.now(ZoneId.of("Europe/Samara"));
         List<Reminder> reminders = repository.findAll();
         for(Reminder r : reminders) {
 

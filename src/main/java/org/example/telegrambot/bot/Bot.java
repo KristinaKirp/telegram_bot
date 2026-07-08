@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Value;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -365,7 +366,7 @@ public class Bot extends TelegramLongPollingBot {
 
                     int day = Integer.parseInt(dm[1]);
                     int month = Integer.parseInt(dm[0]);
-                    int year = LocalDateTime.now().getYear();
+                    int year = LocalDateTime.now(ZoneId.of("Europe/Samara")).getYear();
 
                     LocalDateTime dt = LocalDateTime.of(
                             year,
@@ -469,7 +470,8 @@ public class Bot extends TelegramLongPollingBot {
 
                 int hour = Integer.parseInt(draft.getTime());
 
-                LocalDateTime oldDate = reminder.getEventDateTime();
+                LocalDateTime oldDate = reminder.getEventDateTime().atZone(ZoneId.of("Europe/Samara"))
+                        .toLocalDateTime();;
 
                 LocalDateTime newDate = LocalDateTime.of(
                         oldDate.getYear(),
@@ -637,7 +639,8 @@ public class Bot extends TelegramLongPollingBot {
                     int month = Integer.parseInt(parts[0]);
                     int dayNumber = Integer.parseInt(parts[1]);
 
-                    LocalDateTime oldDate = reminder.getEventDateTime();
+                    LocalDateTime oldDate = reminder.getEventDateTime().atZone(ZoneId.of("Europe/Samara"))
+                            .toLocalDateTime();;
 
                     LocalDateTime newDate = LocalDateTime.of(
                             oldDate.getYear(),
@@ -749,7 +752,7 @@ public class Bot extends TelegramLongPollingBot {
 
     private InlineKeyboardMarkup createCalendarDays(int month) {
 
-        int year = LocalDate.now().getYear();
+        int year = LocalDate.now(ZoneId.of("Europe/Samara")).getYear();
         int maxDays = YearMonth.of(year, month).lengthOfMonth();
 
         InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
@@ -770,7 +773,6 @@ public class Bot extends TelegramLongPollingBot {
             }
         }
 
-        // добавляем остаток ровно один раз
         if (!row.isEmpty()) {
             rows.add(row);
         }
@@ -1024,22 +1026,6 @@ public class Bot extends TelegramLongPollingBot {
 
         return markup;
     }
-
-    private ReplyKeyboardMarkup createBackKeyboard() {
-
-        KeyboardButton back = new KeyboardButton("Назад");
-
-        KeyboardRow row = new KeyboardRow();
-        row.add(back);
-
-        ReplyKeyboardMarkup keyboard = new ReplyKeyboardMarkup();
-
-        keyboard.setKeyboard(List.of(row));
-        keyboard.setResizeKeyboard(true);
-
-        return keyboard;
-    }
-
 
 }
 
