@@ -1,43 +1,28 @@
-package org.example.telegrambot.config;
-
 import jakarta.annotation.PostConstruct;
-import lombok.RequiredArgsConstructor;
 import org.example.telegrambot.bot.Bot;
 import org.springframework.context.annotation.Configuration;
-import org.telegram.telegrambots.meta.TelegramBotsApi;
-import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
+import org.springframework.web.client.RestTemplate;
 
 @Configuration
-@RequiredArgsConstructor
 public class BotConfig {
 
     private final Bot bot;
 
-    @PostConstruct
-    public void registerBot() {
+    public BotConfig(Bot bot) {
+        this.bot = bot;
+    }
 
-        System.out.println("=== BOT CONFIG START ===");
+    @PostConstruct
+    public void registerWebhook() {
+        String webhookUrl = "https://твой-сервис.onrender.com/webhook";
+
+        // Отправляем запрос на установку webhook
+        String url = "https://api.telegram.org/bot" + bot.getBotToken() + "/setWebhook?url=" + webhookUrl;
 
         try {
-
-            TelegramBotsApi botsApi =
-                    new TelegramBotsApi(DefaultBotSession.class);
-
-            System.out.println("=== API CREATED ===");
-
-            botsApi.registerBot(bot);
-
-            System.out.println("=== BOT REGISTERED ===");
-            new Thread(() -> {
-                while (true) {
-                    try {
-                        Thread.sleep(60000);
-                        System.out.println("BOT IS ALIVE " + java.time.LocalDateTime.now());
-                    } catch (InterruptedException e) {
-                        break;
-                    }
-                }
-            }).start();
+            RestTemplate restTemplate = new RestTemplate();
+            String response = restTemplate.postForObject(url, null, String.class);
+            System.out.println("Webhook registration response: " + response);
         } catch (Exception e) {
             e.printStackTrace();
         }
