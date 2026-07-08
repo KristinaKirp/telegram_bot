@@ -15,14 +15,19 @@ public class BotConfig {
 
     @PostConstruct
     public void registerBot() {
+
+        System.out.println("=== BOT CONFIG START ===");
+
         try {
+
             TelegramBotsApi botsApi =
                     new TelegramBotsApi(DefaultBotSession.class);
 
+            System.out.println("=== API CREATED ===");
+
             botsApi.registerBot(bot);
 
-            System.out.println("Бот запущен");
-            System.out.println("Username = " + bot.getBotUsername());
+            System.out.println("=== BOT REGISTERED ===");
 
         } catch (Exception e) {
             e.printStackTrace();
