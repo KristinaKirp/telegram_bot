@@ -17,4 +17,6 @@ public interface ReminderRepository extends JpaRepository<Reminder, Long> {
     List<Reminder> findByChatId(String chatId);
 
     List<Reminder> findByChatIdAndType(String chatId, String type);
+
+    List<Reminder> findBySentFalseAndRemindAtBefore(LocalDateTime now);
 }
